@@ -15,6 +15,7 @@ import { Route as PdvRouteImport } from './routes/pdv'
 import { Route as PainelRouteImport } from './routes/painel'
 import { Route as MinhasVendasRouteImport } from './routes/minhas-vendas'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -48,6 +49,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EquipeRoute = EquipeRouteImport.update({
+  id: '/equipe',
+  path: '/equipe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CadastroRoute = CadastroRouteImport.update({
   id: '/cadastro',
   path: '/cadastro',
@@ -62,6 +68,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
+  '/equipe': typeof EquipeRoute
   '/login': typeof LoginRoute
   '/minhas-vendas': typeof MinhasVendasRoute
   '/painel': typeof PainelRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
+  '/equipe': typeof EquipeRoute
   '/login': typeof LoginRoute
   '/minhas-vendas': typeof MinhasVendasRoute
   '/painel': typeof PainelRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
+  '/equipe': typeof EquipeRoute
   '/login': typeof LoginRoute
   '/minhas-vendas': typeof MinhasVendasRoute
   '/painel': typeof PainelRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cadastro'
+    | '/equipe'
     | '/login'
     | '/minhas-vendas'
     | '/painel'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/cadastro'
+    | '/equipe'
     | '/login'
     | '/minhas-vendas'
     | '/painel'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/cadastro'
+    | '/equipe'
     | '/login'
     | '/minhas-vendas'
     | '/painel'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CadastroRoute: typeof CadastroRoute
+  EquipeRoute: typeof EquipeRoute
   LoginRoute: typeof LoginRoute
   MinhasVendasRoute: typeof MinhasVendasRoute
   PainelRoute: typeof PainelRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/equipe': {
+      id: '/equipe'
+      path: '/equipe'
+      fullPath: '/equipe'
+      preLoaderRoute: typeof EquipeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cadastro': {
       id: '/cadastro'
       path: '/cadastro'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CadastroRoute: CadastroRoute,
+  EquipeRoute: EquipeRoute,
   LoginRoute: LoginRoute,
   MinhasVendasRoute: MinhasVendasRoute,
   PainelRoute: PainelRoute,
@@ -208,3 +229,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
