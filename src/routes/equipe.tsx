@@ -108,28 +108,51 @@ function EquipePage() {
           </div>
         ) : (
           <ul className="space-y-2">
-            {membros.map((m) => (
-              <li
-                key={m.id}
-                className="bg-card rounded-xl p-3 border border-border flex items-center justify-between"
-              >
-                <div className="min-w-0">
-                  <p className="font-semibold truncate">{m.nome}</p>
-                  <p className="text-xs text-muted-foreground capitalize">
-                    {m.role === "gerencia" ? "Gerência" : "Atendente"}
-                  </p>
-                </div>
-                <span
-                  className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${
-                    m.role === "gerencia"
-                      ? "bg-primary/10 text-primary"
-                      : "bg-accent/10 text-accent"
-                  }`}
+            {membros.map((m) => {
+              const isMe = m.id === user?.id;
+              const alvo = m.role === "gerencia" ? "atendente" : "gerencia";
+              return (
+                <li
+                  key={m.id}
+                  className="bg-card rounded-xl p-3 border border-border space-y-2"
                 >
-                  {m.role}
-                </span>
-              </li>
-            ))}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-semibold truncate">
+                        {m.nome} {isMe && <span className="text-xs text-muted-foreground">(você)</span>}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {m.role === "gerencia" ? "Gerência" : "Atendente"}
+                      </p>
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${
+                        m.role === "gerencia"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-accent/10 text-accent"
+                      }`}
+                    >
+                      {m.role}
+                    </span>
+                  </div>
+                  {!isMe && (
+                    <button
+                      onClick={() => alterarCargo(m, alvo)}
+                      disabled={updatingId === m.id}
+                      className="w-full h-9 rounded-lg border border-border text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-muted disabled:opacity-50"
+                    >
+                      {updatingId === m.id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : alvo === "gerencia" ? (
+                        <><ShieldCheck className="w-3.5 h-3.5" /> Promover a gerência</>
+                      ) : (
+                        <><UserIcon className="w-3.5 h-3.5" /> Rebaixar a atendente</>
+                      )}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
