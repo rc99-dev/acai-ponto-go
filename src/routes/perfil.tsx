@@ -2,14 +2,20 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { AppShell } from "@/components/AppShell";
 import { LogOut, User as UserIcon } from "lucide-react";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/perfil")({
   component: Perfil,
 });
 
 function Perfil() {
-  const { profile, role, user, signOut } = useAuth();
+  const { profile, role, user, signOut, refresh } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleLogout() {
     await signOut();
