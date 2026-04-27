@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/AppShell";
-import { Loader2, UserPlus } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { Loader2, UserPlus, ShieldCheck, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/equipe")({
@@ -16,8 +17,10 @@ interface Membro {
 }
 
 function EquipePage() {
+  const { user } = useAuth();
   const [membros, setMembros] = useState<Membro[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -66,6 +69,25 @@ function EquipePage() {
     load();
   }
 
+  async function alterarCargo(membro: Membro, novo: "atendente" | "gerencia") {
+    if (membro.id === user?.id) {
+      toast.error("Você não pode alterar seu próprio cargo");
+      return;
+    }
+    setUpdatingId(membro.id);
+    const { error } = await supabase
+      .from("user_roles")
+      .update({ role: novo })
+      .eq("user_id", membro.id);
+    setUpdatingId(null);
+    if (error) {
+      toast.error("Falha ao alterar cargo", { description: error.message });
+      return;
+    }
+    toast.success(novo === "gerencia" ? "Promovido a gerência" : "Rebaixado a atendente");
+    setMembros((prev) => prev.map((p) => (p.id === membro.id ? { ...p, role: novo } : p)));
+  }
+
   return (
     <AppShell title="Equipe">
       <div className="px-4 pt-4 pb-6 space-y-4">
@@ -86,28 +108,51 @@ function EquipePage() {
           </div>
         ) : (
           <ul className="space-y-2">
-            {membros.map((m) => (
-              <li
-                key={m.id}
-                className="bg-card rounded-xl p-3 border border-border flex items-center justify-between"
-              >
-                <div className="min-w-0">
-                  <p className="font-semibold truncate">{m.nome}</p>
-                  <p className="text-xs text-muted-foreground capitalize">
-                    {m.role === "gerencia" ? "Gerência" : "Atendente"}
-                  </p>
-                </div>
-                <span
-                  className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${
-                    m.role === "gerencia"
-                      ? "bg-primary/10 text-primary"
-                      : "bg-accent/10 text-accent"
-                  }`}
+            {membros.map((m) => {
+              const isMe = m.id === user?.id;
+              const alvo = m.role === "gerencia" ? "atendente" : "gerencia";
+              return (
+                <li
+                  key={m.id}
+                  className="bg-card rounded-xl p-3 border border-border space-y-2"
                 >
-                  {m.role}
-                </span>
-              </li>
-            ))}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-semibold truncate">
+                        {m.nome} {isMe && <span className="text-xs text-muted-foreground">(você)</span>}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {m.role === "gerencia" ? "Gerência" : "Atendente"}
+                      </p>
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${
+                        m.role === "gerencia"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-accent/10 text-accent"
+                      }`}
+                    >
+                      {m.role}
+                    </span>
+                  </div>
+                  {!isMe && (
+                    <button
+                      onClick={() => alterarCargo(m, alvo)}
+                      disabled={updatingId === m.id}
+                      className="w-full h-9 rounded-lg border border-border text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-muted disabled:opacity-50"
+                    >
+                      {updatingId === m.id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : alvo === "gerencia" ? (
+                        <><ShieldCheck className="w-3.5 h-3.5" /> Promover a gerência</>
+                      ) : (
+                        <><UserIcon className="w-3.5 h-3.5" /> Rebaixar a atendente</>
+                      )}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
