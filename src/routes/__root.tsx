@@ -34,7 +34,15 @@ export const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" },
       { title: "Point Scan — Point do Açaí d'Amazônia" },
       { name: "description", content: "PDV mobile para registro e gerenciamento de vendas do Point do Açaí." },
-      { name: "theme-color", content: "#551645" },
+      { name: "theme-color", content: "#7c3aed" },
+      { property: "og:title", content: "Point Scan — Point do Açaí d'Amazônia" },
+      { name: "twitter:title", content: "Point Scan — Point do Açaí d'Amazônia" },
+      { property: "og:description", content: "PDV mobile para registro e gerenciamento de vendas do Point do Açaí." },
+      { name: "twitter:description", content: "PDV mobile para registro e gerenciamento de vendas do Point do Açaí." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7OmEmc9FlwTGqgRXyGmSLvMe2C23/social-images/social-1777319907835-LOGO_POINT.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7OmEmc9FlwTGqgRXyGmSLvMe2C23/social-images/social-1777319907835-LOGO_POINT.webp" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -70,7 +78,7 @@ function RouteRedirector() {
 
   useEffect(() => {
     if (loading) return;
-    const isAuthPage = path === "/login";
+    const isAuthPage = path === "/login" || path === "/cadastro";
     if (!session && !isAuthPage && path !== "/") {
       router.navigate({ to: "/login" });
       return;
@@ -79,7 +87,7 @@ function RouteRedirector() {
       router.navigate({ to: role === "gerencia" ? "/painel" : "/pdv" });
       return;
     }
-    if (session && role === "atendente" && (path.startsWith("/painel") || path.startsWith("/equipe"))) {
+    if (session && role === "atendente" && path.startsWith("/painel")) {
       router.navigate({ to: "/pdv" });
     }
     if (session && role === "gerencia" && (path.startsWith("/pdv") || path.startsWith("/minhas-vendas") || path.startsWith("/scan"))) {
