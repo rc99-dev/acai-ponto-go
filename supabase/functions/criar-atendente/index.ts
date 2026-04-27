@@ -60,14 +60,28 @@ Deno.serve(async (req) => {
       email,
       password,
       email_confirm: true,
-      user_metadata: { nome, role },
+      user_metadata: { nome },
     });
 
-    if (createErr) {
-      return new Response(JSON.stringify({ error: createErr.message }), {
+    if (createErr || !created.user) {
+      return new Response(JSON.stringify({ error: createErr?.message ?? "Erro ao criar usuário" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Trigger always assigns 'atendente'. If gerencia is requested, upgrade explicitly.
+    if (role === "gerencia") {
+      const { error: upErr } = await admin
+        .from("user_roles")
+        .update({ role: "gerencia" })
+        .eq("user_id", created.user.id);
+      if (upErr) {
+        return new Response(JSON.stringify({ error: upErr.message }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
     return new Response(JSON.stringify({ user_id: created.user?.id }), {
