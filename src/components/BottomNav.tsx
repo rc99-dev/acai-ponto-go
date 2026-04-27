@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { ShoppingCart, ListOrdered, ScanLine, User, LayoutDashboard } from "lucide-react";
+import { ShoppingCart, ListOrdered, ScanLine, User, LayoutDashboard, Users } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 
@@ -7,17 +7,19 @@ export function BottomNav() {
   const { role } = useAuth();
   const { pathname } = useLocation();
 
-  const items = role === "gerencia"
-    ? [
-        { to: "/painel", icon: LayoutDashboard, label: "Painel" },
-        { to: "/perfil", icon: User, label: "Perfil" },
-      ]
-    : [
-        { to: "/pdv", icon: ShoppingCart, label: "PDV" },
-        { to: "/minhas-vendas", icon: ListOrdered, label: "Vendas" },
-        { to: "/scan", icon: ScanLine, label: "Scan", disabled: true },
-        { to: "/perfil", icon: User, label: "Perfil" },
-      ];
+  const items: { to: string; icon: typeof User; label: string; disabled?: boolean }[] =
+    role === "gerencia"
+      ? [
+          { to: "/painel", icon: LayoutDashboard, label: "Painel" },
+          { to: "/equipe", icon: Users, label: "Equipe" },
+          { to: "/perfil", icon: User, label: "Perfil" },
+        ]
+      : [
+          { to: "/pdv", icon: ShoppingCart, label: "PDV" },
+          { to: "/minhas-vendas", icon: ListOrdered, label: "Vendas" },
+          { to: "/scan", icon: ScanLine, label: "Scan", disabled: true },
+          { to: "/perfil", icon: User, label: "Perfil" },
+        ];
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 bg-background border-t border-border safe-bottom">

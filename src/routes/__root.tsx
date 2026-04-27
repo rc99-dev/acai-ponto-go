@@ -34,7 +34,7 @@ export const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" },
       { title: "Point Scan — Point do Açaí d'Amazônia" },
       { name: "description", content: "PDV mobile para registro e gerenciamento de vendas do Point do Açaí." },
-      { name: "theme-color", content: "#7c3aed" },
+      { name: "theme-color", content: "#551645" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),

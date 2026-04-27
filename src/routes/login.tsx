@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -78,11 +78,8 @@ function LoginPage() {
             Entrar
           </button>
 
-          <p className="text-center text-sm text-muted-foreground pt-2">
-            Não tem conta?{" "}
-            <Link to="/cadastro" className="text-primary font-semibold">
-              Cadastrar
-            </Link>
+          <p className="text-center text-xs text-muted-foreground pt-2">
+            Acesso restrito. Solicite sua conta à gerência.
           </p>
         </form>
       </div>
