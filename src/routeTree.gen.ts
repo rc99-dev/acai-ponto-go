@@ -9,10 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ScanRouteImport } from './routes/scan'
+import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as PdvRouteImport } from './routes/pdv'
+import { Route as PainelRouteImport } from './routes/painel'
+import { Route as MinhasVendasRouteImport } from './routes/minhas-vendas'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ScanRoute = ScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdvRoute = PdvRouteImport.update({
+  id: '/pdv',
+  path: '/pdv',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelRoute = PainelRouteImport.update({
+  id: '/painel',
+  path: '/painel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhasVendasRoute = MinhasVendasRouteImport.update({
+  id: '/minhas-vendas',
+  path: '/minhas-vendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -33,34 +63,114 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
+  '/minhas-vendas': typeof MinhasVendasRoute
+  '/painel': typeof PainelRoute
+  '/pdv': typeof PdvRoute
+  '/perfil': typeof PerfilRoute
+  '/scan': typeof ScanRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
+  '/minhas-vendas': typeof MinhasVendasRoute
+  '/painel': typeof PainelRoute
+  '/pdv': typeof PdvRoute
+  '/perfil': typeof PerfilRoute
+  '/scan': typeof ScanRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
+  '/minhas-vendas': typeof MinhasVendasRoute
+  '/painel': typeof PainelRoute
+  '/pdv': typeof PdvRoute
+  '/perfil': typeof PerfilRoute
+  '/scan': typeof ScanRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cadastro' | '/login'
+  fullPaths:
+    | '/'
+    | '/cadastro'
+    | '/login'
+    | '/minhas-vendas'
+    | '/painel'
+    | '/pdv'
+    | '/perfil'
+    | '/scan'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cadastro' | '/login'
-  id: '__root__' | '/' | '/cadastro' | '/login'
+  to:
+    | '/'
+    | '/cadastro'
+    | '/login'
+    | '/minhas-vendas'
+    | '/painel'
+    | '/pdv'
+    | '/perfil'
+    | '/scan'
+  id:
+    | '__root__'
+    | '/'
+    | '/cadastro'
+    | '/login'
+    | '/minhas-vendas'
+    | '/painel'
+    | '/pdv'
+    | '/perfil'
+    | '/scan'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CadastroRoute: typeof CadastroRoute
   LoginRoute: typeof LoginRoute
+  MinhasVendasRoute: typeof MinhasVendasRoute
+  PainelRoute: typeof PainelRoute
+  PdvRoute: typeof PdvRoute
+  PerfilRoute: typeof PerfilRoute
+  ScanRoute: typeof ScanRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/scan': {
+      id: '/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof ScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdv': {
+      id: '/pdv'
+      path: '/pdv'
+      fullPath: '/pdv'
+      preLoaderRoute: typeof PdvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel': {
+      id: '/painel'
+      path: '/painel'
+      fullPath: '/painel'
+      preLoaderRoute: typeof PainelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minhas-vendas': {
+      id: '/minhas-vendas'
+      path: '/minhas-vendas'
+      fullPath: '/minhas-vendas'
+      preLoaderRoute: typeof MinhasVendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -89,7 +199,21 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CadastroRoute: CadastroRoute,
   LoginRoute: LoginRoute,
+  MinhasVendasRoute: MinhasVendasRoute,
+  PainelRoute: PainelRoute,
+  PdvRoute: PdvRoute,
+  PerfilRoute: PerfilRoute,
+  ScanRoute: ScanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
