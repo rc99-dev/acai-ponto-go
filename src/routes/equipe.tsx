@@ -69,6 +69,25 @@ function EquipePage() {
     load();
   }
 
+  async function alterarCargo(membro: Membro, novo: "atendente" | "gerencia") {
+    if (membro.id === user?.id) {
+      toast.error("Você não pode alterar seu próprio cargo");
+      return;
+    }
+    setUpdatingId(membro.id);
+    const { error } = await supabase
+      .from("user_roles")
+      .update({ role: novo })
+      .eq("user_id", membro.id);
+    setUpdatingId(null);
+    if (error) {
+      toast.error("Falha ao alterar cargo", { description: error.message });
+      return;
+    }
+    toast.success(novo === "gerencia" ? "Promovido a gerência" : "Rebaixado a atendente");
+    setMembros((prev) => prev.map((p) => (p.id === membro.id ? { ...p, role: novo } : p)));
+  }
+
   return (
     <AppShell title="Equipe">
       <div className="px-4 pt-4 pb-6 space-y-4">
