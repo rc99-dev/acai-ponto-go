@@ -79,7 +79,7 @@ function RouteRedirector() {
   useEffect(() => {
     if (loading) return;
     const isAuthPage = path === "/login" || path === "/cadastro";
-    if (!session && !isAuthPage && path !== "/") {
+    if (!session && !isAuthPage) {
       router.navigate({ to: "/login" });
       return;
     }
