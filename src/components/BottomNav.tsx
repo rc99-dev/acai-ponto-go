@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { ShoppingCart, ListOrdered, ScanLine, User, LayoutDashboard, Users } from "lucide-react";
+import { ShoppingCart, ScanLine, User, LayoutDashboard, Users, Package } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 
@@ -11,12 +11,12 @@ export function BottomNav() {
     role === "gerencia"
       ? [
           { to: "/painel", icon: LayoutDashboard, label: "Painel" },
+          { to: "/produtos", icon: Package, label: "Produtos" },
           { to: "/equipe", icon: Users, label: "Equipe" },
           { to: "/perfil", icon: User, label: "Perfil" },
         ]
       : [
           { to: "/pdv", icon: ShoppingCart, label: "PDV" },
-          { to: "/minhas-vendas", icon: ListOrdered, label: "Vendas" },
           { to: "/scan", icon: ScanLine, label: "Scan", disabled: true },
           { to: "/perfil", icon: User, label: "Perfil" },
         ];

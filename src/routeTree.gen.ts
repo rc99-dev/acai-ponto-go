@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ScanRouteImport } from './routes/scan'
+import { Route as ProdutosRouteImport } from './routes/produtos'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PdvRouteImport } from './routes/pdv'
 import { Route as PainelRouteImport } from './routes/painel'
@@ -21,6 +22,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const ScanRoute = ScanRouteImport.update({
   id: '/scan',
   path: '/scan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutosRoute = ProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/painel': typeof PainelRoute
   '/pdv': typeof PdvRoute
   '/perfil': typeof PerfilRoute
+  '/produtos': typeof ProdutosRoute
   '/scan': typeof ScanRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/painel': typeof PainelRoute
   '/pdv': typeof PdvRoute
   '/perfil': typeof PerfilRoute
+  '/produtos': typeof ProdutosRoute
   '/scan': typeof ScanRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/painel': typeof PainelRoute
   '/pdv': typeof PdvRoute
   '/perfil': typeof PerfilRoute
+  '/produtos': typeof ProdutosRoute
   '/scan': typeof ScanRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/painel'
     | '/pdv'
     | '/perfil'
+    | '/produtos'
     | '/scan'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/painel'
     | '/pdv'
     | '/perfil'
+    | '/produtos'
     | '/scan'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/painel'
     | '/pdv'
     | '/perfil'
+    | '/produtos'
     | '/scan'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   PainelRoute: typeof PainelRoute
   PdvRoute: typeof PdvRoute
   PerfilRoute: typeof PerfilRoute
+  ProdutosRoute: typeof ProdutosRoute
   ScanRoute: typeof ScanRoute
 }
 
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/scan'
       fullPath: '/scan'
       preLoaderRoute: typeof ScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produtos': {
+      id: '/produtos'
+      path: '/produtos'
+      fullPath: '/produtos'
+      preLoaderRoute: typeof ProdutosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelRoute: PainelRoute,
   PdvRoute: PdvRoute,
   PerfilRoute: PerfilRoute,
+  ProdutosRoute: ProdutosRoute,
   ScanRoute: ScanRoute,
 }
 export const routeTree = rootRouteImport

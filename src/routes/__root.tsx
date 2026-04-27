@@ -87,10 +87,21 @@ function RouteRedirector() {
       router.navigate({ to: role === "gerencia" ? "/painel" : "/pdv" });
       return;
     }
-    if (session && role === "atendente" && path.startsWith("/painel")) {
+    if (
+      session &&
+      role === "atendente" &&
+      (path.startsWith("/painel") ||
+        path.startsWith("/minhas-vendas") ||
+        path.startsWith("/equipe") ||
+        path.startsWith("/produtos"))
+    ) {
       router.navigate({ to: "/pdv" });
     }
-    if (session && role === "gerencia" && (path.startsWith("/pdv") || path.startsWith("/minhas-vendas") || path.startsWith("/scan"))) {
+    if (
+      session &&
+      role === "gerencia" &&
+      (path.startsWith("/pdv") || path.startsWith("/minhas-vendas") || path.startsWith("/scan"))
+    ) {
       router.navigate({ to: "/painel" });
     }
   }, [loading, session, role, path, router]);
