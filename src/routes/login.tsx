@@ -28,7 +28,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen grid place-items-center px-5 bg-gradient-to-br from-[oklch(0.25_0.12_293)] via-primary to-[oklch(0.35_0.2_293)]">
+    <div className="min-h-screen grid place-items-center px-5 bg-gradient-to-br from-[oklch(0.18_0.06_348)] via-primary to-[oklch(0.42_0.12_348)]">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8 text-primary-foreground">
           <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur grid place-items-center mx-auto mb-3 text-2xl font-extrabold">
