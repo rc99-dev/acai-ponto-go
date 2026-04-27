@@ -92,16 +92,26 @@ function PDV() {
   async function confirmar() {
     if (!user || cart.length === 0) return;
     setSaving(true);
+
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !sessionData.session) {
+      setSaving(false);
+      toast.error("Sessão expirada. Faça login novamente.");
+      return;
+    }
+
     const { data: venda, error } = await supabase
       .from("vendas")
-      .insert({ atendente_id: user.id, total, observacoes: obs || null })
+      .insert({ atendente_id: user.id, total: 0, observacoes: obs || null })
       .select("id")
       .single();
+
     if (error || !venda) {
       setSaving(false);
       toast.error("Erro ao salvar venda", { description: error?.message });
       return;
     }
+
     const itens = cart.map((i) => ({
       venda_id: venda.id,
       produto_id: i.produto.id,
@@ -110,12 +120,15 @@ function PDV() {
       quantidade: i.qtd,
       subtotal: i.produto.preco * i.qtd,
     }));
+
     const { error: e2 } = await supabase.from("venda_itens").insert(itens);
     setSaving(false);
+
     if (e2) {
       toast.error("Erro ao salvar itens", { description: e2.message });
       return;
     }
+
     toast.success(`Venda registrada • ${brl(total)}`, {
       description: `${cart.reduce((s, i) => s + i.qtd, 0)} item(ns) • ${profile?.nome ?? ""}`,
     });
@@ -128,7 +141,6 @@ function PDV() {
   return (
     <AppShell title="Ponto de Venda">
       <div className="px-4 pt-4 pb-4 space-y-4">
-        {/* Busca */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -139,7 +151,6 @@ function PDV() {
           />
         </div>
 
-        {/* Catálogo */}
         <div className="space-y-4">
           {(["acai", "salgados", "outros"] as const).map((cat) =>
             grupos[cat].length === 0 ? null : (
@@ -170,7 +181,6 @@ function PDV() {
         </div>
       </div>
 
-      {/* Carrinho fixo */}
       {cart.length > 0 && (
         <div className="sticky bottom-16 z-20 bg-background border-t border-border shadow-[0_-8px_24px_rgba(0,0,0,0.06)]">
           <div className="max-w-2xl mx-auto px-4 py-3 space-y-3">
@@ -180,10 +190,7 @@ function PDV() {
             </div>
             <ul className="max-h-48 overflow-auto space-y-2">
               {cart.map((i) => (
-                <li
-                  key={i.produto.id}
-                  className="flex items-center gap-2 bg-surface rounded-lg p-2"
-                >
+                <li key={i.produto.id} className="flex items-center gap-2 bg-surface rounded-lg p-2">
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">{i.produto.nome}</div>
                     <div className="text-xs text-muted-foreground">
@@ -236,7 +243,6 @@ function PDV() {
         </div>
       )}
 
-      {/* Modal seletor de quantidade */}
       {pickProduto && (
         <div
           className="fixed inset-0 z-50 bg-black/50 grid place-items-end sm:place-items-center px-4"
