@@ -70,7 +70,7 @@ function RouteRedirector() {
 
   useEffect(() => {
     if (loading) return;
-    const isAuthPage = path === "/login" || path === "/cadastro";
+    const isAuthPage = path === "/login";
     if (!session && !isAuthPage && path !== "/") {
       router.navigate({ to: "/login" });
       return;
@@ -79,7 +79,7 @@ function RouteRedirector() {
       router.navigate({ to: role === "gerencia" ? "/painel" : "/pdv" });
       return;
     }
-    if (session && role === "atendente" && path.startsWith("/painel")) {
+    if (session && role === "atendente" && (path.startsWith("/painel") || path.startsWith("/equipe"))) {
       router.navigate({ to: "/pdv" });
     }
     if (session && role === "gerencia" && (path.startsWith("/pdv") || path.startsWith("/minhas-vendas") || path.startsWith("/scan"))) {
