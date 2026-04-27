@@ -275,7 +275,7 @@ function SummaryCard({
   accent?: boolean;
 }) {
   const cls = primary
-    ? "bg-gradient-to-br from-primary to-[oklch(0.4_0.22_293)] text-primary-foreground"
+    ? "bg-gradient-to-br from-primary to-[oklch(0.42_0.12_348)] text-primary-foreground"
     : accent
     ? "bg-accent text-accent-foreground"
     : "bg-card text-foreground border border-border";

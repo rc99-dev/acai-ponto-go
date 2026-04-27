@@ -1,1 +1,4 @@
 project_id = "imvzouwulwpfbemunhbl"
+
+[functions.criar-atendente]
+verify_jwt = true

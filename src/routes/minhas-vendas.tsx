@@ -70,7 +70,7 @@ function MinhasVendas() {
   return (
     <AppShell title="Minhas vendas hoje">
       <div className="px-4 pt-4 pb-6 space-y-4">
-        <div className="bg-gradient-to-br from-primary to-[oklch(0.4_0.22_293)] rounded-2xl p-5 text-primary-foreground shadow-lg">
+        <div className="bg-gradient-to-br from-primary to-[oklch(0.42_0.12_348)] rounded-2xl p-5 text-primary-foreground shadow-lg">
           <p className="text-xs uppercase tracking-wider opacity-80">Faturamento de hoje</p>
           <p className="text-3xl font-extrabold mt-1">{brl(totalDia)}</p>
           <p className="text-sm opacity-80 mt-1">{vendas.length} venda(s) registrada(s)</p>

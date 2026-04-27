@@ -34,7 +34,7 @@ export const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" },
       { title: "Point Scan — Point do Açaí d'Amazônia" },
       { name: "description", content: "PDV mobile para registro e gerenciamento de vendas do Point do Açaí." },
-      { name: "theme-color", content: "#7c3aed" },
+      { name: "theme-color", content: "#551645" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -70,7 +70,7 @@ function RouteRedirector() {
 
   useEffect(() => {
     if (loading) return;
-    const isAuthPage = path === "/login" || path === "/cadastro";
+    const isAuthPage = path === "/login";
     if (!session && !isAuthPage && path !== "/") {
       router.navigate({ to: "/login" });
       return;
@@ -79,7 +79,7 @@ function RouteRedirector() {
       router.navigate({ to: role === "gerencia" ? "/painel" : "/pdv" });
       return;
     }
-    if (session && role === "atendente" && path.startsWith("/painel")) {
+    if (session && role === "atendente" && (path.startsWith("/painel") || path.startsWith("/equipe"))) {
       router.navigate({ to: "/pdv" });
     }
     if (session && role === "gerencia" && (path.startsWith("/pdv") || path.startsWith("/minhas-vendas") || path.startsWith("/scan"))) {
