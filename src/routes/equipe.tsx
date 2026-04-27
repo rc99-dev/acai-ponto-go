@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/AppShell";
-import { Loader2, UserPlus } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { Loader2, UserPlus, ShieldCheck, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/equipe")({
